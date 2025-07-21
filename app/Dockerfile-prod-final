@@ -1,0 +1,53 @@
+###################
+#final image
+###################
+FROM ubuntu:22.04
+
+#directory for the app user
+RUN mkdir -p /home/app
+RUN apt-get update && apt-get install -y gosu
+
+#create the nginx user so that nginx can later own the files in /usr/src/app/static
+RUN groupadd -g 102 nginx && useradd -u 102 -g nginx -s /sbin/nologin -M nginx
+
+#create the app user
+RUN addgroup --system app && adduser --system --group app
+
+#create appropriate directories ### I am here * * *
+ENV HOME=/home/app
+ENV APP_HOME=/home/app/web
+RUN mkdir $APP_HOME 
+WORKDIR $APP_HOME
+
+#install dependencies (after creating an image called django-recomm-build)
+RUN apt-get update && apt-get install -y --no-install-recommends netcat 
+RUN apt-get install net-tools 
+RUN apt-get update && apt-get install -y libpq-dev build-essential && rm -rf /var/lib/apt/lists/*
+
+#RUN mkdir /wheels #not needed because Docker automaticlly creates the destination folder if it doesn exist
+COPY --from=django-recomm-build /usr/src/app/wheels/* /wheels/
+
+RUN apt-get update && apt-get install -y python3 python3-pip
+RUN pip install --upgrade pip
+RUN pip install --no-cache /wheels/*
+
+COPY --from=donbes/django-recomm-build /usr/src/app/ .
+# the above copy is unnecessary, even though the local folder will be mapped into a volume
+# this is because mapping occurs at runtime (container), but the images is needed to push to dockerhub
+RUN rm -rf /wheels
+RUN sed -i 's/\r$//g' entrypoint-prod.sh #substitue all returns at the end with nothing
+RUN chmod +x entrypoint-prod.sh
+
+#chown all the files to the app user
+RUN chown -R app:app $APP_HOME
+
+#change user to app
+#USER app
+#RUN echo "$(ls)"
+#run entrypoint bash script
+ENTRYPOINT ["/home/app/web/entrypoint-prod.sh"]
+
+
+
+
+
