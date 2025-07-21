@@ -28,3 +28,21 @@ RUN apt-get update && apt-get install -y libpq-dev build-essential && rm -rf /va
 COPY --from=donbes/django-recomm-build /usr/src/app/ .
 RUN echo "Contents of /wheels:" && ls -l ./wheels/
 
+RUN apt-get update && apt-get install -y python3 python3-pip
+RUN pip install --upgrade pip
+RUN pip install --no-cache ./wheels/*.whl
+
+# the above copy is unnecessary, even though the local folder will be mapped into a volume
+# this is because mapping occurs at runtime (container), but the images is needed to push to dockerhub
+RUN rm -rf /wheels
+RUN sed -i 's/\r$//g' entrypoint-prod.sh #substitue all returns at the end with nothing
+RUN chmod +x entrypoint-prod.sh
+
+#chown all the files to the app user
+RUN chown -R app:app $APP_HOME
+
+#change user to app
+#USER app
+#RUN echo "$(ls)"
+#run entrypoint bash script
+ENTRYPOINT ["/home/app/web/entrypoint-prod.sh"]
