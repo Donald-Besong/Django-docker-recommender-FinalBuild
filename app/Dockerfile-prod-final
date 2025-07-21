@@ -26,7 +26,7 @@ RUN apt-get update && apt-get install -y libpq-dev build-essential && rm -rf /va
 
 #RUN mkdir /wheels #not needed because Docker automaticlly creates the destination folder if it doesn exist
 COPY --from=donbes/django-recomm-build /usr/src/app/ .
-RUN echo "Contents of /wheels:" && ls -l /wheels/
+RUN echo "Contents of /wheels:" && ls -l ./wheels/
 
 RUN apt-get update && apt-get install -y python3 python3-pip
 RUN pip install --upgrade pip
