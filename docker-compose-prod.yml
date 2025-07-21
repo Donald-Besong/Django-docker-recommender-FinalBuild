@@ -31,7 +31,7 @@ services:
       - 5432:5432
   nginx:
     restart: always
-    build: ./nginx
+    build: ./nginx_just_a_test
     # the port is not needed in production because the loadbalancer
     # resolves it
     ports:  
