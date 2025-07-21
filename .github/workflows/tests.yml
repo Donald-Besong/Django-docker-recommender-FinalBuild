@@ -67,3 +67,6 @@ jobs:
           echo "Waiting for Django app..."
           sleep 10
           done
+
+      - name: Show Django logs
+        run: docker-compose logs web
