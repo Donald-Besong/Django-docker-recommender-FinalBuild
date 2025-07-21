@@ -69,4 +69,4 @@ jobs:
           done
 
       - name: Show Django logs
-        run: docker-compose logs web
+        run: docker-compose -f docker-compose-prod.yml logs web
