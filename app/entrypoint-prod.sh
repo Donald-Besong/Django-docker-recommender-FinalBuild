@@ -5,7 +5,7 @@ DJANGO_ENV=${DJANGO_ENV:-development}
 
 echo "Starting with environment: $DJANGO_ENV"
 
-chown -R nginx:nginx /usr/src/app/static || echo "chown failed, likely due to volume permissions"
+chown -R nginx:nginx /home/app/web/static || echo "chown failed, likely due to volume permissions"
 
 if [ "$DJANGO_ENV" = "production" ]; then
     echo "Collecting static files for production..."
