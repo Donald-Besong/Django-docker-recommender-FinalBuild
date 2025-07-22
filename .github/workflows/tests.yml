@@ -55,18 +55,27 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }} 
-        
-      - name: Final Build Stage and Run docker-compose
-        working-directory: .
-        run: docker-compose -f docker-compose-prod.yml up -d --build
-      
-      - name: Wait for Django app to be ready
+          
+      - name: Display .env-prod file
         run: |
-          for i in {1..10}; do
-          curl --fail http://localhost:1337/ && break
-          echo "Waiting for Django app..."
-          sleep 10
-          done
+          echo "*** This location is $(pwd)/"
+          echo "*** Contents of .env-prod"
+          cat .env-prod
+               
+          echo "*** Contents of .env-prod-db"
+          cat .env-prod-db
+      
+     # - name: Final Build Stage and Run docker-compose
+     #   working-directory: .
+     #   run: docker-compose -f docker-compose-prod.yml up -d --build
+      
+     # - name: Wait for Django app to be ready
+     #   run: |
+     #     for i in {1..10}; do
+     #     curl --fail http://localhost:1337/ && break
+     #     echo "Waiting for Django app..."
+     #     sleep 10
+     #     done
 
-      - name: Show Django logs
-        run: docker-compose -f docker-compose-prod.yml logs web
+     # - name: Show Django logs
+     #   run: docker-compose -f docker-compose-prod.yml logs web
