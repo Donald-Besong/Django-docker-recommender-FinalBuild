@@ -69,13 +69,18 @@ jobs:
         working-directory: .
         run: docker-compose -f docker-compose-prod.yml up -d --build
       
-      - name: Wait for Django app to be ready
+      - name: Print Django settings info
         run: |
-          for i in {1..10}; do
-          curl --fail http://localhost:1337/ && break
-          echo "Waiting for Django app..."
-          sleep 10
-          done
+          python -c "import django.conf; print('Settings module:', django.conf.settings.SETTINGS_MODULE); print('STATIC_ROOT:', django.conf.settings.STATIC_ROOT); print('DEBUG:', django.conf.settings.DEBUG)"
 
-      - name: Show Django logs
-        run: docker-compose -f docker-compose-prod.yml logs web
+      
+      # - name: Wait for Django app to be ready
+      #  run: |
+      #    for i in {1..10}; do
+      #    curl --fail http://localhost:1337/ && break
+      #    echo "Waiting for Django app..."
+      #    sleep 10
+      #    done
+
+      # - name: Show Django logs
+      #  run: docker-compose -f docker-compose-prod.yml logs web
