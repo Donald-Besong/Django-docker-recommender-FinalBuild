@@ -80,5 +80,5 @@ jobs:
       #    sleep 10
       #    done
 
-     - name: Show Django logs
-       run: docker-compose -f docker-compose-prod.yml logs web
+      - name: Show Django logs
+        run: docker-compose -f docker-compose-prod.yml logs web
