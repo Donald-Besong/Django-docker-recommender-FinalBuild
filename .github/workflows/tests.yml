@@ -75,12 +75,22 @@ jobs:
       - name: Wait for Django app to be ready
         run: |
           for i in {1..10}; do
-          curl --fail http://localhost:1337/ && break
-          echo "Waiting for Django app..."
-          sleep 10
+            if curl --fail --silent --output /dev/null http://localhost:1337/; then
+              echo "Django app is up"
+              exit 0
+            fi 
+            echo "Waiting for Django app..."
+            sleep 10
           done
+          echo "Django app failed to start"
+          exit 1
 
       - name: Show Django logs
         run: docker-compose -f docker-compose-prod.yml logs web
         
 # Abrbitrary code change if I need to test commit without any other code changes(1)
+# Notes on Waiting for Django app to be ready
+# --silent → suppresses progress meter.
+# --output /dev/null → discards response body (no HTML shown).
+# --fail → causes curl to return a non-zero exit code on HTTP errors (e.g., 404, 500).
+# exit 0 / exit 1 → script returns true/false based on success.
