@@ -80,7 +80,7 @@ jobs:
               exit 0
             fi 
             echo "Waiting for Django app..."
-            sleep 10
+            sleep 2
           done
           echo "Django app failed to start"
           exit 1
@@ -88,6 +88,10 @@ jobs:
       - name: Show Django logs
         run: docker-compose -f docker-compose-prod.yml logs web
         
+      - name: Perform pytest inside web container
+        run: docker-compose -f docker-compose-prod.yml exec web pytest
+
+# Notes on Wait for Django app to be ready:        
 # Abrbitrary code change if I need to test commit without any other code changes(1)
 # Notes on Waiting for Django app to be ready
 # --silent → suppresses progress meter.
