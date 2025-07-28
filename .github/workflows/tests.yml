@@ -89,7 +89,9 @@ jobs:
         run: docker-compose -f docker-compose-prod.yml logs web
         
       - name: Perform pytest inside web container
-        run: docker-compose -f docker-compose-prod.yml exec web pytest
+        run: docker-compose -f docker-compose-prod.yml run --rm -e DJANGO_SETTINGS_MODULE=donald_project.settings web pytest -v
+        
+# in Perform pytest inside web container, -v is the verbose option for pytest to displey each test fuction name
 
 # Notes on Wait for Django app to be ready:        
 # Abrbitrary code change if I need to test commit without any other code changes(1)
