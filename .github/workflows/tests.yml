@@ -88,8 +88,8 @@ jobs:
       - name: Show Django logs
         run: docker-compose -f docker-compose-prod.yml logs web
         
-      # - name: Perform pytest inside web container
-      #   run: docker-compose exec -f docker-compose-prod.yml web pytest -v
+      - name: Perform pytest inside web container
+        run: docker-compose -f docker-compose-prod.yml exec -e DJANGO_SETTINGS_MODULE=donald_project.settings web pytest -v
         
 # in Perform pytest inside web container, -v is the verbose option for pytest to displey each test fuction name
 # and note that only one variable is needed because it is the only one absetn in .env-prod, 
