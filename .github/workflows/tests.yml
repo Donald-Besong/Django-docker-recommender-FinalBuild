@@ -96,9 +96,9 @@ jobs:
 # And since manage.py is not called.
 
 # Notes on Wait for Django app to be ready:        
-# Abrbitrary code change if I need to test commit without any other code changes(1)
 # Notes on Waiting for Django app to be ready
 # --silent → suppresses progress meter.
 # --output /dev/null → discards response body (no HTML shown).
 # --fail → causes curl to return a non-zero exit code on HTTP errors (e.g., 404, 500).
 # exit 0 / exit 1 → script returns true/false based on success.
+# Abrbitrary code change if I need to test commit without any other code changes(1)
